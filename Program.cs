@@ -220,8 +220,262 @@ var str_list = new List<string>()
 //str_list.RemoveAll(x => x == str);
 
 //20
-str_list.RemoveAt(4);
-foreach (var item in str_list)
-{
-    Console.WriteLine(item);
-}
+//str_list.RemoveAt(4);
+
+
+//21
+//str_list.RemoveRange(1,str_list.Count);
+//foreach (var item in str_list)
+//{
+//    Console.WriteLine(item);
+//}
+
+//22
+//string[] arr1;
+//int n, i, ctr;
+
+//n = Convert.ToInt32(Console.ReadLine());
+//arr1 = new string[n];
+//for (i = 0; i < n; i++)
+//{
+//    Console.Write("Element[{0}] : ", i);
+//    arr1[i] = Console.ReadLine();
+//}
+
+//ctr = Convert.ToInt32(Console.ReadLine());
+
+//IEnumerable<string> objNew = from m in arr1
+//                             where m.Length >= ctr
+//                             orderby m
+//                             select m;
+
+//foreach (string z in objNew)
+//    Console.WriteLine("Item: {0}", z);
+
+//23
+//char[] chars = { 'A', 'B', 'C' };
+//int[] nums = { 1, 2, 3 };
+
+//var result = from bel in chars
+//             from son in nums
+//             select new { bel, son };
+
+
+
+//var result_2 = chars.SelectMany(num => nums, (chars, nums) => new { bel = chars, son = nums })
+//                      .GroupBy(x => x.bel);
+
+
+//Console.Write("The cartesian product are : \n");
+//foreach (var item in result)
+//{
+//    Console.WriteLine(item);
+//}
+//Console.WriteLine("\n\n");
+//foreach (var item in result_2)
+//{
+//    Console.Write(item.Key+" => ");
+//    foreach (var item2 in item)
+//    {
+//        Console.Write($"\"{item2.son}\"  ");
+//    }
+
+//    Console.WriteLine();
+//}
+
+
+//24
+
+//char[] charset1 = { 'X', 'Y', 'Z' };
+//int[] numset1 = { 1, 2, 3 };
+//string[] colorset1 = { "Green", "Orange" };
+
+
+//var cartesianProduct = from letter in charset1
+//                       from number in numset1
+//                       from colour in colorset1
+//                       select new { letter, number, colour };
+
+
+//var cartesianProduct_2 = charset1
+//    .SelectMany(letter => numset1, (letter, number) => new { letter, number })
+//    .SelectMany(temp => colorset1, (temp, colour) => new { temp.letter, temp.number, colour });
+
+
+//foreach (var ProductList in cartesianProduct)
+//{
+//    Console.WriteLine(ProductList);
+//}
+
+
+//25
+
+List<Item_mast> itemlist = new List<Item_mast>
+           {
+           new Item_mast { id = 1, name = "Biscuit" },
+           new Item_mast { id = 2, name = "Chocolate" },
+           new Item_mast { id = 3, name = "Butter" },
+           new Item_mast { id = 4, name = "Brade" },
+           new Item_mast { id = 5, name = "Honey" }
+            };
+
+List<Purchase> purchlist = new List<Purchase>
+            {
+           new Purchase { InvNo=100, ItemId = 3,  PurQty = 800 },
+           new Purchase { InvNo=101, ItemId = 2,  PurQty = 650 },
+           new Purchase { InvNo=102, ItemId = 3,  PurQty = 900 },
+           new Purchase { InvNo=103, ItemId = 4,  PurQty = 700 },
+           new Purchase { InvNo=104, ItemId = 3,  PurQty = 900 },
+           new Purchase { InvNo=105, ItemId = 4,  PurQty = 650 },
+           new Purchase { InvNo=106, ItemId = 1,  PurQty = 458 }
+           };
+
+
+//var result = itemlist.Join(purchlist,
+//                        item => item.id,
+//                        purch => purch.ItemId,
+//                        (item, purch) => new
+//                        {
+//                            Item_Id = item.id,
+//                            Item_Name = item.name,
+//                            PurChase_Quantity =purch.PurQty
+//                        });
+//Console.WriteLine("Item ID         Item Name       Purchase Quantity\n-------------------------------------------------------");
+//foreach (var item in result)
+//{
+//    string x = (item.Item_Name.Length > 8) ? "\t" : "\t\t";
+//    Console.WriteLine($"{item.Item_Id}\t\t{item.Item_Name}{x}{item.PurChase_Quantity}");
+//}
+
+
+
+
+//26
+//var leftOuterJoin = itemlist
+//    .GroupJoin(purchlist, itm => itm.id, prch => prch.ItemId, (itm, a) => new { itm, a })
+//    .SelectMany(x => x.a.DefaultIfEmpty(new Purchase()), (x, b) => new
+//    {
+//        itid = x.itm.id,
+//        itdes = x.itm.name,
+//        prqty = b.PurQty
+//    });
+
+
+//var leftOuterJoin_2 = from itm in itemlist
+//                    join prch in purchlist
+//                    on itm.id equals prch.ItemId
+//                    into a
+//                    from b in a.DefaultIfEmpty(new Purchase())
+//                    select new
+//                    {
+//                        itid = itm.id,
+//                        itdes = itm.name,
+//                        prqty = b.PurQty
+//                    };
+
+
+//foreach (var data in leftOuterJoin)
+//{
+//    string x = (data.itdes.Length > 8) ? "\t" : "\t\t";
+//    Console.WriteLine(data.itid + "\t\t" + data.itdes + x + data.prqty);
+//}
+
+//Console.WriteLine();
+
+//foreach (var data in leftOuterJoin_2)
+//{
+//    string x = (data.itdes.Length > 8) ? "\t" : "\t\t";
+//    Console.WriteLine(data.itid + "\t\t" + data.itdes + x + data.prqty);
+//}
+
+
+
+//27
+
+//var rightOuterJoin = from p in purchlist
+//                     join i in itemlist
+//                     on p.ItemId equals i.id
+//                     into a
+//                     from b in a.DefaultIfEmpty()
+//                     orderby b.id
+//                     select new
+//                     {
+//                         itid = b.id,
+//                         itdes = b.name,
+//                         prqty = p.PurQty
+//                     };
+
+//var rightOuterJoin_1 = purchlist
+//    .GroupJoin(itemlist, p => p.ItemId, i => i.id, (p, a) => new { p, a })
+//    .SelectMany(x => x.a.DefaultIfEmpty(), (x, b) => new
+//    {
+//        itid = b?.id,
+//        itdes = b?.name,
+//        prqty = x.p.PurQty
+//    }).OrderBy(x=>x.itid);
+
+//foreach (var data in rightOuterJoin)
+//{
+//    string x = (data.itdes.Length > 8) ? "\t" : "\t\t";
+
+//    Console.WriteLine(data.itid + "\t" + data.itdes + x + data.prqty);
+//}
+
+//28
+
+
+//var list = new List<string>()
+//{
+//    "ROME","CALIFORNIA","PARIS","LONDON","ZURICH",
+//    "NAIROBI","ABU DHABI","NEW DELHI","AMSTERDAM",
+//};
+
+//var result = list.OrderBy(x=>x.Length).ThenBy(x => x);
+//foreach (var item in result)
+//{
+//    Console.WriteLine(item);
+//}
+
+//29
+
+//string[] cities =
+//            {
+//                "ROME","LONDON","NAIROBI","CALIFORNIA",
+//                "ZURICH","NEW DELHI","AMSTERDAM",
+//                "ABU DHABI", "PARIS","NEW YORK"
+//            };
+
+
+//var citySplit = from i in Enumerable.Range(0, cities.Length)
+//                group cities[i] by i / 3;
+
+
+//var citySplit_1 = Enumerable.Range(0, cities.Length)
+//    .GroupBy(x=>x / 3, x => cities[x]);
+
+
+//foreach (var city in citySplit)
+//    cityView(string.Join(";  ", city.ToList()));
+
+//Console.WriteLine();
+
+//foreach (var city in citySplit_1)
+//    cityView(string.Join(";  ", city.ToList()));
+
+   
+//static void cityView(string cityMetro)
+//{
+//    Console.WriteLine(cityMetro);
+//}
+
+
+//30
+//var res = itemlist.Select(x=>x.name)
+//                    .Distinct()
+//                    .OrderBy(x => x);
+
+//foreach (var item in res)
+//{
+//    Console.WriteLine(item);
+//}
+
